@@ -4311,6 +4311,15 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rbd</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rados block volume that will be mounted on the host machine; see <a href="http://releases.k8s.io/HEAD/examples/rbd/README.md">http://releases.k8s.io/HEAD/examples/rbd/README.md</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsNonRootGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates that the container must run as a non-root group. If true, the Kubelet will validate the image at runtime to ensure that it does not run as GID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">supplementalGroups</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of groups applied to the first process run in each container, in addition to the container&#8217;s primary GID.  If unspecified, no groups will be added to any container.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_v1_rbdvolumesource">v1.RBDVolumeSource</a></p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -4963,6 +4972,18 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsNonRootGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates that the container must run as a non-root group. If true, the Kubelet will validate the image at runtime to ensure that it does not run as GID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">readOnlyRootFilesystem</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether this container has a read-only root filesystem. Default is false.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">containerID</p></td>

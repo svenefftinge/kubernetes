@@ -261,6 +261,12 @@ const (
 	//
 	// Enables the regional PD feature on GCE.
 	GCERegionalPersistentDisk utilfeature.Feature = "GCERegionalPersistentDisk"
+
+	// owner: @krmayankk
+	// alpha: v1.10
+	//
+	// Disable runAsNonRootGroup
+	RunAsNonRootGroup utilfeature.Feature = "RunAsNonRootGroup"
 )
 
 func init() {
@@ -323,4 +329,7 @@ var defaultKubernetesFeatureGates = map[utilfeature.Feature]utilfeature.FeatureS
 	// features that enable backwards compatibility but are scheduled to be removed
 	ServiceProxyAllowExternalIPs: {Default: false, PreRelease: utilfeature.Deprecated},
 	ReadOnlyAPIDataVolumes:       {Default: true, PreRelease: utilfeature.Deprecated},
+
+	// features to disable runAsNonRootGroup
+	RunAsNonRootGroup: {Default: false, PreRelease: utilfeature.Alpha},
 }

@@ -270,6 +270,19 @@ message PodSecurityPolicySpec {
   // is allowed in the "Volumes" field.
   // +optional
   repeated AllowedFlexVolume allowedFlexVolumes = 18;
+
+  // runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+  optional RunAsGroupStrategyOptions runAsGroup = 19;
+}
+
+// RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
+message RunAsGroupStrategyOptions {
+  // Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.
+  optional string rule = 1;
+
+  // Ranges are the allowed ranges of uids that may be used.
+  // +optional
+  repeated IDRange ranges = 2;
 }
 
 // Run A sUser Strategy Options defines the strategy type and any options used to create the strategy.

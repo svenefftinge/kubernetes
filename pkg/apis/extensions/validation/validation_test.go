@@ -23,6 +23,7 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 
+	"github.com/stretchr/testify/assert"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/validation/field"
@@ -2332,6 +2333,9 @@ func TestValidatePodSecurityPolicy(t *testing.T) {
 				RunAsUser: extensions.RunAsUserStrategyOptions{
 					Rule: extensions.RunAsUserStrategyRunAsAny,
 				},
+				RunAsGroup: extensions.RunAsGroupStrategyOptions{
+					Rule: extensions.RunAsGroupStrategyRunAsAny,
+				},
 				FSGroup: extensions.FSGroupStrategyOptions{
 					Rule: extensions.FSGroupStrategyRunAsAny,
 				},
@@ -2738,6 +2742,9 @@ func TestValidatePSPVolumes(t *testing.T) {
 				RunAsUser: extensions.RunAsUserStrategyOptions{
 					Rule: extensions.RunAsUserStrategyRunAsAny,
 				},
+				RunAsGroup: extensions.RunAsGroupStrategyOptions{
+					Rule: extensions.RunAsGroupStrategyRunAsAny,
+				},
 				FSGroup: extensions.FSGroupStrategyOptions{
 					Rule: extensions.FSGroupStrategyRunAsAny,
 				},
@@ -2811,5 +2818,54 @@ func TestIsValidSysctlPattern(t *testing.T) {
 		if IsValidSysctlPattern(s) {
 			t.Errorf("%q expected to be an invalid sysctl pattern", s)
 		}
+	}
+}
+
+func Test_validatePSPRunAsUser(t *testing.T) {
+	var testCases = []struct {
+		runAsUserStrategy extensions.RunAsUserStrategyOptions
+		fail              bool
+	}{
+		{extensions.RunAsUserStrategyOptions{Rule: extensions.RunAsUserStrategy("someInvalidStrategy")}, true},
+		{extensions.RunAsUserStrategyOptions{Rule: extensions.RunAsUserStrategyMustRunAs}, false},
+		{extensions.RunAsUserStrategyOptions{Rule: extensions.RunAsUserStrategyMustRunAsNonRoot}, false},
+		{extensions.RunAsUserStrategyOptions{Rule: extensions.RunAsUserStrategyMustRunAs, Ranges: []extensions.UserIDRange{{Min: 2, Max: 3}, {Min: 4, Max: 5}}}, false},
+		{extensions.RunAsUserStrategyOptions{Rule: extensions.RunAsUserStrategyMustRunAs, Ranges: []extensions.UserIDRange{{Min: 2, Max: 3}, {Min: 5, Max: 4}}}, true},
+	}
+
+	for _, testCase := range testCases {
+		errList := validatePSPRunAsUser(field.NewPath("status"), &testCase.runAsUserStrategy)
+		numErrors := len(errList)
+		expectedErrs := 1
+		if !testCase.fail {
+			expectedErrs = 0
+		}
+		assert.Equal(t, numErrors, expectedErrs, "testCase runAsUserStrategy %v", testCase.runAsUserStrategy)
+	}
+}
+
+func Test_validatePSPRunAsGroup(t *testing.T) {
+	var testCases = []struct {
+		runAsGroupStrategy extensions.RunAsGroupStrategyOptions
+		fail               bool
+	}{
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategy("someInvalidStrategy")}, true},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyMustRunAs}, false},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyRunAsAny}, false},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyMustRunAsNonRoot}, false},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyMustRunAs, Ranges: []extensions.GroupIDRange{{Min: 2, Max: 3}, {Min: 4, Max: 5}}}, false},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyMustRunAs, Ranges: []extensions.GroupIDRange{{Min: 4, Max: 3}, {Min: 4, Max: 5}}}, true},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyMustRunAsNonRoot, Ranges: []extensions.GroupIDRange{{Min: 4, Max: 5}}}, true},
+		{extensions.RunAsGroupStrategyOptions{Rule: extensions.RunAsGroupStrategyRunAsAny, Ranges: []extensions.GroupIDRange{{Min: 4, Max: 5}}}, true},
+	}
+
+	for _, testCase := range testCases {
+		errList := validatePSPRunAsGroup(field.NewPath("status"), &testCase.runAsGroupStrategy)
+		numErrors := len(errList)
+		expectedErrs := 1
+		if !testCase.fail {
+			expectedErrs = 0
+		}
+		assert.Equal(t, numErrors, expectedErrs, "testCase runAsGroupStrategy %v", testCase.runAsGroupStrategy)
 	}
 }

@@ -518,6 +518,10 @@ func TestDefaultAllowPrivilegeEscalationForPodSecurityPolicy(t *testing.T) {
 	if psp2.Spec.AllowPrivilegeEscalation == nil || *psp2.Spec.AllowPrivilegeEscalation != true {
 		t.Errorf("Expected default to true, got: %#v", psp2.Spec.AllowPrivilegeEscalation)
 	}
+
+	if psp2.Spec.RunAsGroup.Rule != extensionsv1beta1.RunAsGroupStrategyRunAsAny {
+		t.Errorf("Expected default RunAsGroup Rule to RunAsGroupStratgeyRunAsAny, got: %#v", psp2.Spec.RunAsGroup.Rule)
+	}
 }
 
 func TestSetDefaultNetworkPolicy(t *testing.T) {

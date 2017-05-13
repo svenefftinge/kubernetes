@@ -32,4 +32,7 @@ func SetDefaults_PodSecurityPolicySpec(obj *policyv1beta1.PodSecurityPolicySpec)
 		t := true
 		obj.AllowPrivilegeEscalation = &t
 	}
+	if obj.RunAsGroup.Rule == "" {
+		obj.RunAsGroup.Rule = policyv1beta1.RunAsGroupStrategyRunAsAny
+	}
 }

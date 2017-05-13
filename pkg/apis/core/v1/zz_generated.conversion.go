@@ -3774,7 +3774,9 @@ func Convert_core_PodProxyOptions_To_v1_PodProxyOptions(in *core.PodProxyOptions
 func autoConvert_v1_PodSecurityContext_To_core_PodSecurityContext(in *v1.PodSecurityContext, out *core.PodSecurityContext, s conversion.Scope) error {
 	out.SELinuxOptions = (*core.SELinuxOptions)(unsafe.Pointer(in.SELinuxOptions))
 	out.RunAsUser = (*int64)(unsafe.Pointer(in.RunAsUser))
+	out.RunAsGroup = (*int64)(unsafe.Pointer(in.RunAsGroup))
 	out.RunAsNonRoot = (*bool)(unsafe.Pointer(in.RunAsNonRoot))
+	out.RunAsNonRootGroup = (*bool)(unsafe.Pointer(in.RunAsNonRootGroup))
 	out.SupplementalGroups = *(*[]int64)(unsafe.Pointer(&in.SupplementalGroups))
 	out.FSGroup = (*int64)(unsafe.Pointer(in.FSGroup))
 	return nil
@@ -3787,7 +3789,9 @@ func autoConvert_core_PodSecurityContext_To_v1_PodSecurityContext(in *core.PodSe
 	// INFO: in.ShareProcessNamespace opted out of conversion generation
 	out.SELinuxOptions = (*v1.SELinuxOptions)(unsafe.Pointer(in.SELinuxOptions))
 	out.RunAsUser = (*int64)(unsafe.Pointer(in.RunAsUser))
+	out.RunAsGroup = (*int64)(unsafe.Pointer(in.RunAsGroup))
 	out.RunAsNonRoot = (*bool)(unsafe.Pointer(in.RunAsNonRoot))
+	out.RunAsNonRootGroup = (*bool)(unsafe.Pointer(in.RunAsNonRootGroup))
 	out.SupplementalGroups = *(*[]int64)(unsafe.Pointer(&in.SupplementalGroups))
 	out.FSGroup = (*int64)(unsafe.Pointer(in.FSGroup))
 	return nil
@@ -4983,7 +4987,9 @@ func autoConvert_v1_SecurityContext_To_core_SecurityContext(in *v1.SecurityConte
 	out.Privileged = (*bool)(unsafe.Pointer(in.Privileged))
 	out.SELinuxOptions = (*core.SELinuxOptions)(unsafe.Pointer(in.SELinuxOptions))
 	out.RunAsUser = (*int64)(unsafe.Pointer(in.RunAsUser))
+	out.RunAsGroup = (*int64)(unsafe.Pointer(in.RunAsGroup))
 	out.RunAsNonRoot = (*bool)(unsafe.Pointer(in.RunAsNonRoot))
+	out.RunAsNonRootGroup = (*bool)(unsafe.Pointer(in.RunAsNonRootGroup))
 	out.ReadOnlyRootFilesystem = (*bool)(unsafe.Pointer(in.ReadOnlyRootFilesystem))
 	out.AllowPrivilegeEscalation = (*bool)(unsafe.Pointer(in.AllowPrivilegeEscalation))
 	return nil
@@ -4999,7 +5005,9 @@ func autoConvert_core_SecurityContext_To_v1_SecurityContext(in *core.SecurityCon
 	out.Privileged = (*bool)(unsafe.Pointer(in.Privileged))
 	out.SELinuxOptions = (*v1.SELinuxOptions)(unsafe.Pointer(in.SELinuxOptions))
 	out.RunAsUser = (*int64)(unsafe.Pointer(in.RunAsUser))
+	out.RunAsGroup = (*int64)(unsafe.Pointer(in.RunAsGroup))
 	out.RunAsNonRoot = (*bool)(unsafe.Pointer(in.RunAsNonRoot))
+	out.RunAsNonRootGroup = (*bool)(unsafe.Pointer(in.RunAsNonRootGroup))
 	out.ReadOnlyRootFilesystem = (*bool)(unsafe.Pointer(in.ReadOnlyRootFilesystem))
 	out.AllowPrivilegeEscalation = (*bool)(unsafe.Pointer(in.AllowPrivilegeEscalation))
 	return nil

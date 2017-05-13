@@ -70,6 +70,9 @@ func SetDefaults_PodSecurityPolicySpec(obj *extensionsv1beta1.PodSecurityPolicyS
 		t := true
 		obj.AllowPrivilegeEscalation = &t
 	}
+	if obj.RunAsGroup.Rule == "" {
+		obj.RunAsGroup.Rule = extensionsv1beta1.RunAsGroupStrategyRunAsAny
+	}
 }
 
 func SetDefaults_Deployment(obj *extensionsv1beta1.Deployment) {

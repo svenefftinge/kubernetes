@@ -2499,6 +2499,10 @@
        "$ref": "v1beta1.AllowedFlexVolume"
       },
       "description": "AllowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the \"Volumes\" field."
+     },
+     "runAsGroup": {
+      "$ref": "v1beta1.RunAsGroupStrategyOptions",
+      "description": "runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set."
      }
     }
    },
@@ -2663,6 +2667,26 @@
      "driver": {
       "type": "string",
       "description": "Driver is the name of the Flexvolume driver."
+     }
+    }
+   },
+   "v1beta1.RunAsGroupStrategyOptions": {
+    "id": "v1beta1.RunAsGroupStrategyOptions",
+    "description": "RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.",
+    "required": [
+     "rule"
+    ],
+    "properties": {
+     "rule": {
+      "type": "string",
+      "description": "Rule is the strategy that will dictate the allowable RunAsGroup values that may be set."
+     },
+     "ranges": {
+      "type": "array",
+      "items": {
+       "$ref": "v1beta1.IDRange"
+      },
+      "description": "Ranges are the allowed ranges of uids that may be used."
      }
     }
    },

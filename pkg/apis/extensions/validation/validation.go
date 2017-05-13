@@ -632,6 +632,7 @@ func ValidatePodSecurityPolicySpec(spec *extensions.PodSecurityPolicySpec, fldPa
 	allErrs := field.ErrorList{}
 
 	allErrs = append(allErrs, validatePSPRunAsUser(fldPath.Child("runAsUser"), &spec.RunAsUser)...)
+	allErrs = append(allErrs, validatePSPRunAsGroup(fldPath.Child("runAsGroup"), &spec.RunAsGroup)...)
 	allErrs = append(allErrs, validatePSPSELinux(fldPath.Child("seLinux"), &spec.SELinux)...)
 	allErrs = append(allErrs, validatePSPSupplementalGroup(fldPath.Child("supplementalGroups"), &spec.SupplementalGroups)...)
 	allErrs = append(allErrs, validatePSPFSGroup(fldPath.Child("fsGroup"), &spec.FSGroup)...)
@@ -744,7 +745,8 @@ func validatePSPRunAsUser(fldPath *field.Path, runAsUser *extensions.RunAsUserSt
 	allErrs := field.ErrorList{}
 
 	// ensure the user strategy has a valid rule
-	supportedRunAsUserRules := sets.NewString(string(extensions.RunAsUserStrategyMustRunAs),
+	supportedRunAsUserRules := sets.NewString(
+		string(extensions.RunAsUserStrategyMustRunAs),
 		string(extensions.RunAsUserStrategyMustRunAsNonRoot),
 		string(extensions.RunAsUserStrategyRunAsAny))
 	if !supportedRunAsUserRules.Has(string(runAsUser.Rule)) {
@@ -754,6 +756,31 @@ func validatePSPRunAsUser(fldPath *field.Path, runAsUser *extensions.RunAsUserSt
 	// validate range settings
 	for idx, rng := range runAsUser.Ranges {
 		allErrs = append(allErrs, validateUserIDRange(fldPath.Child("ranges").Index(idx), rng)...)
+	}
+
+	return allErrs
+}
+
+// validatePSPRunAsGroup validates the RunAsGroup fields of PodSecurityPolicy.
+func validatePSPRunAsGroup(fldPath *field.Path, runAsGroup *extensions.RunAsGroupStrategyOptions) field.ErrorList {
+	allErrs := field.ErrorList{}
+
+	// ensure the group strategy has a valid rule
+	supportedRunAsGroupRules := sets.NewString(string(extensions.RunAsGroupStrategyMustRunAs),
+		string(extensions.RunAsGroupStrategyMustRunAsNonRoot),
+		string(extensions.RunAsGroupStrategyRunAsAny))
+	if !supportedRunAsGroupRules.Has(string(runAsGroup.Rule)) {
+		allErrs = append(allErrs, field.NotSupported(fldPath.Child("rule"), runAsGroup.Rule, supportedRunAsGroupRules.List()))
+	}
+
+	// Ranges are only supported for MustRunAs policy
+	if runAsGroup.Ranges != nil && runAsGroup.Rule != extensions.RunAsGroupStrategyMustRunAs {
+		allErrs = append(allErrs, field.Invalid(fldPath.Child("rule"), runAsGroup.Rule, "RunAsGroup.Rule must be `RunAsGroupStrategyMustRunAs` when `Ranges` are specified"))
+	}
+
+	// validate range settings
+	for idx, rng := range runAsGroup.Ranges {
+		allErrs = append(allErrs, validateGroupIDRange(fldPath.Child("ranges").Index(idx), rng)...)
 	}
 
 	return allErrs

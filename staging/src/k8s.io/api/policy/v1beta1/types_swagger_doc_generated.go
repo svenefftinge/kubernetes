@@ -168,10 +168,21 @@ var map_PodSecurityPolicySpec = map[string]string{
 	"allowPrivilegeEscalation":        "AllowPrivilegeEscalation determines if a pod can request to allow privilege escalation. If unspecified, defaults to true.",
 	"allowedHostPaths":                "is a white list of allowed host paths. Empty indicates that all host paths may be used.",
 	"allowedFlexVolumes":              "AllowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the \"Volumes\" field.",
+	"runAsGroup":                      "runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.",
 }
 
 func (PodSecurityPolicySpec) SwaggerDoc() map[string]string {
 	return map_PodSecurityPolicySpec
+}
+
+var map_RunAsGroupStrategyOptions = map[string]string{
+	"":       "RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.",
+	"rule":   "Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.",
+	"ranges": "Ranges are the allowed ranges of uids that may be used.",
+}
+
+func (RunAsGroupStrategyOptions) SwaggerDoc() map[string]string {
+	return map_RunAsGroupStrategyOptions
 }
 
 var map_RunAsUserStrategyOptions = map[string]string{
