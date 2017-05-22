@@ -830,6 +830,9 @@ message PodSecurityPolicySpec {
   // runAsUser is the strategy that will dictate the allowable RunAsUser values that may be set.
   optional RunAsUserStrategyOptions runAsUser = 11;
 
+  // runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+  optional RunAsGroupStrategyOptions runAsGroup = 19;
+
   // SupplementalGroups is the strategy that will dictate what supplemental groups are used by the SecurityContext.
   optional SupplementalGroupsStrategyOptions supplementalGroups = 12;
 
@@ -1039,6 +1042,16 @@ message RollingUpdateDeployment {
   // at any time during the update is atmost 130% of desired pods.
   // +optional
   optional k8s.io.apimachinery.pkg.util.intstr.IntOrString maxSurge = 2;
+}
+
+// RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
+message RunAsGroupStrategyOptions {
+  // Rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+  optional string rule = 1;
+
+  // Ranges are the allowed ranges of uids that may be used.
+  // +optional
+  repeated IDRange ranges = 2;
 }
 
 // Run A sUser Strategy Options defines the strategy type and any options used to create the strategy.
