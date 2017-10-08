@@ -583,7 +583,7 @@ func (RollingUpdateDeployment) SwaggerDoc() map[string]string {
 
 var map_RunAsGroupStrategyOptions = map[string]string{
 	"":       "RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.",
-	"rule":   "Rule is the strategy that will dictate the allowable RunAsUser values that may be set.",
+	"rule":   "Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.",
 	"ranges": "Ranges are the allowed ranges of uids that may be used.",
 }
 

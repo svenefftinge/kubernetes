@@ -558,10 +558,6 @@ message LinuxContainerSecurityContext {
     // exist in the container image (i.e. in the /etc/passwd inside the image),
     // and be resolved there by the runtime; otherwise, the runtime MUST error.
     string run_as_username = 6;
-    // Group name to run the container process as. If specified, the group MUST
-    // exist in the container image (i.e. in the /etc/group inside the image),
-    // and be resolved there by the runtime; otherwise, the runtime MUST error.
-    string run_as_groupname = 13;
     // If set, the root filesystem of the container is read-only.
     bool readonly_rootfs = 7;
     // List of groups applied to the first process run in the container, in

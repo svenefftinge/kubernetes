@@ -762,7 +762,7 @@ Examples: <code>/foo</code> would allow <code>/foo</code>, <code>/foo/</code> an
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rule</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Rule is the strategy that will dictate the allowable RunAsUser values that may be set.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">string</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -6585,6 +6585,13 @@ Both these may change in the future. Incoming requests are matched against the h
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsNonRootGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates that the container must run as a non-root group. If true, the Kubelet will validate the image at runtime to ensure that it does not run as GID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">supplementalGroups</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A list of groups applied to the first process run in each container, in addition to the container&#8217;s primary GID.  If unspecified, no groups will be added to any container.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
@@ -7408,6 +7415,13 @@ Both these may change in the future. Incoming requests are matched against the h
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsNonRootGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates that the container must run as a non-root group. If true, the Kubelet will validate the image at runtime to ensure that it does not run as GID 0 (root) and fail to start the container if it does. If unset or false, no such validation will be performed. May also be set in SecurityContext.  If set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">readOnlyRootFilesystem</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether this container has a read-only root filesystem. Default is false.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
@@ -8029,13 +8043,6 @@ Both these may change in the future. Incoming requests are matched against the h
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">runAsGroup</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_v1beta1_runasgroupstrategyoptions">v1beta1.RunAsGroupStrategyOptions</a></p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">supplementalGroups</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">SupplementalGroups is the strategy that will dictate what supplemental groups are used by the SecurityContext.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
@@ -8082,6 +8089,13 @@ Both these may change in the future. Incoming requests are matched against the h
 <td class="tableblock halign-left valign-top"><p class="tableblock">AllowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the "Volumes" field.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_v1beta1_allowedflexvolume">v1beta1.AllowedFlexVolume</a> array</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsGroup</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_v1beta1_runasgroupstrategyoptions">v1beta1.RunAsGroupStrategyOptions</a></p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>

@@ -4882,7 +4882,7 @@ func ValidateSecurityContext(sc *core.SecurityContext, fldPath *field.Path) fiel
 	}
 
 	if sc.RunAsGroup != nil {
-		if *sc.RunAsGroup < 0 {
+		if validation.IsValidGroupID(*sc.RunAsGroup) != nil {
 			allErrs = append(allErrs, field.Invalid(fldPath.Child("runAsGroup"), *sc.RunAsGroup, isNegativeErrorMsg))
 		}
 	}

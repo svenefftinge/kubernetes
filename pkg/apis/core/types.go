@@ -2648,21 +2648,20 @@ type PodSecurityContext struct {
 	// If unspecified, the container runtime will allocate a random SELinux context for each
 	// container.  May also be set in SecurityContext.  If set in
 	// both SecurityContext and PodSecurityContext, the value specified in SecurityContext
-	// takes precedence for that container.
+	// takes precedence.
 	// +optional
 	SELinuxOptions *SELinuxOptions
 	// The UID to run the entrypoint of the container process.
 	// Defaults to user specified in image metadata if unspecified.
 	// May also be set in SecurityContext.  If set in both SecurityContext and
-	// PodSecurityContext, the value specified in SecurityContext takes precedence
-	// for that container.
+	// PodSecurityContext, the value specified in SecurityContext takes precedence.
 	// +optional
 	RunAsUser *int64
 	// The GID to run the entrypoint of the container process.
-	// Defaults to group specified in image metadata if unspecified.
+	// Defaults to group specified in image metadata if unspecified. If group
+	// is not specified in image metadata, the default is GID 0.
 	// May also be set in SecurityContext.  If set in both SecurityContext and
-	// PodSecurityContext, the value specified in SecurityContext takes precedence
-	// for that container.
+	// PodSecurityContext, the value specified in SecurityContext takes precedence.
 	// +optional
 	RunAsGroup *int64
 	// Indicates that the container must run as a non-root user.
@@ -2673,6 +2672,15 @@ type PodSecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext takes precedence.
 	// +optional
 	RunAsNonRoot *bool
+	// Indicates that the container must run as a non-root group.
+	// If true, the Kubelet will validate the image at runtime to ensure that it
+	// does not run as GID 0 (root) and fail to start the container if it does.
+	// If unset or false, no such validation will be performed.
+	// May also be set in SecurityContext.  If set in both SecurityContext and
+	// PodSecurityContext, the value specified in SecurityContext takes precedence.
+	// +optional
+	RunAsNonRootGroup *bool
+
 	// A list of groups applied to the first process run in each container, in addition
 	// to the container's primary GID.  If unspecified, no groups will be added to
 	// any container.
@@ -4569,6 +4577,14 @@ type SecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext takes precedence.
 	// +optional
 	RunAsNonRoot *bool
+	// Indicates that the container must run as a non-root group.
+	// If true, the Kubelet will validate the image at runtime to ensure that it
+	// does not run as GID 0 (root) and fail to start the container if it does.
+	// If unset or false, no such validation will be performed.
+	// May also be set in SecurityContext.  If set in both SecurityContext and
+	// PodSecurityContext, the value specified in SecurityContext takes precedence.
+	// +optional
+	RunAsNonRootGroup *bool
 	// The read-only root filesystem allows you to restrict the locations that an application can write
 	// files to, ensuring the persistent data can only be written to mounts.
 	// +optional

@@ -153,6 +153,11 @@ func DetermineEffectiveSecurityContext(pod *v1.Pod, container *v1.Container) *v1
 		*effectiveSc.RunAsNonRoot = *containerSc.RunAsNonRoot
 	}
 
+	if containerSc.RunAsNonRootGroup != nil {
+		effectiveSc.RunAsNonRootGroup = new(bool)
+		*effectiveSc.RunAsNonRootGroup = *containerSc.RunAsNonRootGroup
+	}
+
 	if containerSc.ReadOnlyRootFilesystem != nil {
 		effectiveSc.ReadOnlyRootFilesystem = new(bool)
 		*effectiveSc.ReadOnlyRootFilesystem = *containerSc.ReadOnlyRootFilesystem
@@ -192,76 +197,23 @@ func securityContextFromPodSecurityContext(pod *v1.Pod) *v1.SecurityContext {
 		*synthesized.RunAsNonRoot = *pod.Spec.SecurityContext.RunAsNonRoot
 	}
 
+	if pod.Spec.SecurityContext.RunAsNonRootGroup != nil {
+		synthesized.RunAsNonRootGroup = new(bool)
+		*synthesized.RunAsNonRootGroup = *pod.Spec.SecurityContext.RunAsNonRootGroup
+	}
+
 	return synthesized
 }
 
-// TODO: remove the duplicate code
-func InternalDetermineEffectiveSecurityContext(pod *api.Pod, container *api.Container) *api.SecurityContext {
-	effectiveSc := internalSecurityContextFromPodSecurityContext(pod)
-	containerSc := container.SecurityContext
-
-	if effectiveSc == nil && containerSc == nil {
-		return nil
-	}
-	if effectiveSc != nil && containerSc == nil {
-		return effectiveSc
-	}
-	if effectiveSc == nil && containerSc != nil {
-		return containerSc
-	}
-
-	if containerSc.SELinuxOptions != nil {
-		effectiveSc.SELinuxOptions = new(api.SELinuxOptions)
-		*effectiveSc.SELinuxOptions = *containerSc.SELinuxOptions
-	}
-
-	if containerSc.Capabilities != nil {
-		effectiveSc.Capabilities = new(api.Capabilities)
-		*effectiveSc.Capabilities = *containerSc.Capabilities
-	}
-
-	if containerSc.Privileged != nil {
-		effectiveSc.Privileged = new(bool)
-		*effectiveSc.Privileged = *containerSc.Privileged
-	}
-
-	if containerSc.RunAsUser != nil {
-		effectiveSc.RunAsUser = new(int64)
-		*effectiveSc.RunAsUser = *containerSc.RunAsUser
-	}
-
-	if containerSc.RunAsGroup != nil {
-		effectiveSc.RunAsGroup = new(int64)
-		*effectiveSc.RunAsGroup = *containerSc.RunAsGroup
-	}
-
-	if containerSc.RunAsNonRoot != nil {
-		effectiveSc.RunAsNonRoot = new(bool)
-		*effectiveSc.RunAsNonRoot = *containerSc.RunAsNonRoot
-	}
-
-	if containerSc.ReadOnlyRootFilesystem != nil {
-		effectiveSc.ReadOnlyRootFilesystem = new(bool)
-		*effectiveSc.ReadOnlyRootFilesystem = *containerSc.ReadOnlyRootFilesystem
-	}
-
-	if containerSc.AllowPrivilegeEscalation != nil {
-		effectiveSc.AllowPrivilegeEscalation = new(bool)
-		*effectiveSc.AllowPrivilegeEscalation = *containerSc.AllowPrivilegeEscalation
-	}
-
-	return effectiveSc
-}
-
-func internalSecurityContextFromPodSecurityContext(pod *api.Pod) *api.SecurityContext {
+func internalSecurityContextFromPodSecurityContext(pod *v1.Pod) *v1.SecurityContext {
 	if pod.Spec.SecurityContext == nil {
 		return nil
 	}
 
-	synthesized := &api.SecurityContext{}
+	synthesized := &v1.SecurityContext{}
 
 	if pod.Spec.SecurityContext.SELinuxOptions != nil {
-		synthesized.SELinuxOptions = &api.SELinuxOptions{}
+		synthesized.SELinuxOptions = &v1.SELinuxOptions{}
 		*synthesized.SELinuxOptions = *pod.Spec.SecurityContext.SELinuxOptions
 	}
 	if pod.Spec.SecurityContext.RunAsUser != nil {
@@ -276,6 +228,11 @@ func internalSecurityContextFromPodSecurityContext(pod *api.Pod) *api.SecurityCo
 	if pod.Spec.SecurityContext.RunAsNonRoot != nil {
 		synthesized.RunAsNonRoot = new(bool)
 		*synthesized.RunAsNonRoot = *pod.Spec.SecurityContext.RunAsNonRoot
+	}
+
+	if pod.Spec.SecurityContext.RunAsNonRootGroup != nil {
+		synthesized.RunAsNonRootGroup = new(bool)
+		*synthesized.RunAsNonRootGroup = *pod.Spec.SecurityContext.RunAsNonRootGroup
 	}
 
 	return synthesized

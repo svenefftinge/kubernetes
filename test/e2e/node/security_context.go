@@ -74,10 +74,25 @@ var _ = SIGDescribe("Security Context [Feature:SecurityContext]", func() {
 		pod := scTestPod(false, false)
 		userID := int64(1001)
 		pod.Spec.SecurityContext.RunAsUser = &userID
-		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id -u"}
+		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id"}
 
 		f.TestContainerOutput("pod.Spec.SecurityContext.RunAsUser", pod, 0, []string{
-			fmt.Sprintf("%v", userID),
+			fmt.Sprintf("uid=%v", userID),
+			"gid=0",
+		})
+	})
+
+	It("should support pod.Spec.SecurityContext.RunAsUser And pod.Spec.SecurityContext.RunAsGroup", func() {
+		pod := scTestPod(false, false)
+		userID := int64(1001)
+		groupID := int64(2002)
+		pod.Spec.SecurityContext.RunAsUser = &userID
+		pod.Spec.SecurityContext.RunAsGroup = &groupID
+		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id"}
+
+		f.TestContainerOutput("pod.Spec.SecurityContext.RunAsUser", pod, 0, []string{
+			fmt.Sprintf("uid=%v", userID),
+			fmt.Sprintf("gid=%v", groupID),
 		})
 	})
 
@@ -88,10 +103,30 @@ var _ = SIGDescribe("Security Context [Feature:SecurityContext]", func() {
 		pod.Spec.SecurityContext.RunAsUser = &userID
 		pod.Spec.Containers[0].SecurityContext = new(v1.SecurityContext)
 		pod.Spec.Containers[0].SecurityContext.RunAsUser = &overrideUserID
-		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id -u"}
+		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id"}
 
 		f.TestContainerOutput("pod.Spec.SecurityContext.RunAsUser", pod, 0, []string{
-			fmt.Sprintf("%v", overrideUserID),
+			fmt.Sprintf("uid=%v", overrideUserID),
+			"gid=0",
+		})
+	})
+
+	It("should support container.SecurityContext.RunAsUser And container.SecurityContext.RunAsGroup", func() {
+		pod := scTestPod(false, false)
+		userID := int64(1001)
+		groupID := int64(2001)
+		overrideUserID := int64(1002)
+		overrideGroupID := int64(2002)
+		pod.Spec.SecurityContext.RunAsUser = &userID
+		pod.Spec.SecurityContext.RunAsGroup = &groupID
+		pod.Spec.Containers[0].SecurityContext = new(v1.SecurityContext)
+		pod.Spec.Containers[0].SecurityContext.RunAsUser = &overrideUserID
+		pod.Spec.Containers[0].SecurityContext.RunAsGroup = &overrideGroupID
+		pod.Spec.Containers[0].Command = []string{"sh", "-c", "id"}
+
+		f.TestContainerOutput("pod.Spec.SecurityContext.RunAsUser", pod, 0, []string{
+			fmt.Sprintf("uid=%v", overrideUserID),
+			fmt.Sprintf("gid=%v", overrideGroupID),
 		})
 	})
 

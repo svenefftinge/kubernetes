@@ -745,7 +745,8 @@ func validatePSPRunAsUser(fldPath *field.Path, runAsUser *extensions.RunAsUserSt
 	allErrs := field.ErrorList{}
 
 	// ensure the user strategy has a valid rule
-	supportedRunAsUserRules := sets.NewString(string(extensions.RunAsUserStrategyMustRunAs),
+	supportedRunAsUserRules := sets.NewString(
+		string(extensions.RunAsUserStrategyMustRunAs),
 		string(extensions.RunAsUserStrategyMustRunAsNonRoot),
 		string(extensions.RunAsUserStrategyRunAsAny))
 	if !supportedRunAsUserRules.Has(string(runAsUser.Rule)) {
@@ -770,6 +771,11 @@ func validatePSPRunAsGroup(fldPath *field.Path, runAsGroup *extensions.RunAsGrou
 		string(extensions.RunAsGroupStrategyRunAsAny))
 	if !supportedRunAsGroupRules.Has(string(runAsGroup.Rule)) {
 		allErrs = append(allErrs, field.NotSupported(fldPath.Child("rule"), runAsGroup.Rule, supportedRunAsGroupRules.List()))
+	}
+
+	// Ranges are only supported for MustRunAs policy
+	if runAsGroup.Ranges != nil && runAsGroup.Rule != extensions.RunAsGroupStrategyMustRunAs {
+		allErrs = append(allErrs, field.Invalid(fldPath.Child("rule"), runAsGroup.Rule, "RunAsGroup.Rule must be `RunAsGroupStrategyMustRunAs` when `Ranges` are specified"))
 	}
 
 	// validate range settings

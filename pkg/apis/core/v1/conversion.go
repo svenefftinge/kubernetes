@@ -452,6 +452,34 @@ func Convert_v1_Secret_To_core_Secret(in *v1.Secret, out *core.Secret, s convers
 
 	return nil
 }
+
+func Convert_v1_SecurityContext_To_core_SecurityContext(in *v1.SecurityContext, out *core.SecurityContext, s conversion.Scope) error {
+	if in.Capabilities != nil {
+		out.Capabilities = new(core.Capabilities)
+		if err := Convert_v1_Capabilities_To_core_Capabilities(in.Capabilities, out.Capabilities, s); err != nil {
+			return err
+		}
+	} else {
+		out.Capabilities = nil
+	}
+	out.Privileged = in.Privileged
+	if in.SELinuxOptions != nil {
+		out.SELinuxOptions = new(core.SELinuxOptions)
+		if err := Convert_v1_SELinuxOptions_To_core_SELinuxOptions(in.SELinuxOptions, out.SELinuxOptions, s); err != nil {
+			return err
+		}
+	} else {
+		out.SELinuxOptions = nil
+	}
+	out.RunAsUser = in.RunAsUser
+	out.RunAsGroup = in.RunAsGroup
+	out.RunAsNonRoot = in.RunAsNonRoot
+	out.RunAsNonRootGroup = in.RunAsNonRootGroup
+	out.ReadOnlyRootFilesystem = in.ReadOnlyRootFilesystem
+	out.AllowPrivilegeEscalation = in.AllowPrivilegeEscalation
+	return nil
+}
+
 func Convert_core_SecurityContext_To_v1_SecurityContext(in *core.SecurityContext, out *v1.SecurityContext, s conversion.Scope) error {
 	if in.Capabilities != nil {
 		out.Capabilities = new(v1.Capabilities)
@@ -473,6 +501,7 @@ func Convert_core_SecurityContext_To_v1_SecurityContext(in *core.SecurityContext
 	out.RunAsUser = in.RunAsUser
 	out.RunAsGroup = in.RunAsGroup
 	out.RunAsNonRoot = in.RunAsNonRoot
+	out.RunAsNonRootGroup = in.RunAsNonRootGroup
 	out.ReadOnlyRootFilesystem = in.ReadOnlyRootFilesystem
 	out.AllowPrivilegeEscalation = in.AllowPrivilegeEscalation
 	return nil
@@ -491,6 +520,7 @@ func Convert_core_PodSecurityContext_To_v1_PodSecurityContext(in *core.PodSecuri
 	out.RunAsUser = in.RunAsUser
 	out.RunAsGroup = in.RunAsGroup
 	out.RunAsNonRoot = in.RunAsNonRoot
+	out.RunAsNonRootGroup = in.RunAsNonRootGroup
 	out.FSGroup = in.FSGroup
 	return nil
 }
@@ -508,6 +538,7 @@ func Convert_v1_PodSecurityContext_To_core_PodSecurityContext(in *v1.PodSecurity
 	out.RunAsUser = in.RunAsUser
 	out.RunAsGroup = in.RunAsGroup
 	out.RunAsNonRoot = in.RunAsNonRoot
+	out.RunAsNonRootGroup = in.RunAsNonRootGroup
 	out.FSGroup = in.FSGroup
 	return nil
 }

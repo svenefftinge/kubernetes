@@ -944,7 +944,7 @@ type PodSecurityPolicySpec struct {
 	// +optional
 	AllowedFlexVolumes []AllowedFlexVolume `json:"allowedFlexVolumes,omitempty" protobuf:"bytes,18,rep,name=allowedFlexVolumes"`
 	// runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
-	RunAsGroup RunAsGroupStrategyOptions `json:"runAsGroup" protobuf:"bytes,18,opt,name=runAsGroup"`
+	RunAsGroup RunAsGroupStrategyOptions `json:"runAsGroup,omitempty" protobuf:"bytes,19,opt,name=runAsGroup"`
 }
 
 // defines the host volume conditions that will be enabled by a policy
@@ -1035,7 +1035,7 @@ type RunAsUserStrategyOptions struct {
 
 // RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
 type RunAsGroupStrategyOptions struct {
-	// Rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+	// Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.
 	Rule RunAsGroupStrategy `json:"rule" protobuf:"bytes,1,opt,name=rule,casttype=RunAsGroupStrategy"`
 	// Ranges are the allowed ranges of uids that may be used.
 	// +optional

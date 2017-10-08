@@ -998,20 +998,20 @@ type RunAsUserStrategy string
 const (
 	// container must run as a particular uid.
 	RunAsUserStrategyMustRunAs RunAsUserStrategy = "MustRunAs"
-	// container must run as a non-root uid
+	// container must run as a non-root uid.
 	RunAsUserStrategyMustRunAsNonRoot RunAsUserStrategy = "MustRunAsNonRoot"
 	// container may make requests for any uid.
 	RunAsUserStrategyRunAsAny RunAsUserStrategy = "RunAsAny"
 )
 
-// RunAsGroupStrategy denotes strategy types for generating RunAsUser values for a
+// RunAsGroupStrategy denotes strategy types for generating RunAsGroup values for a
 // SecurityContext.
 type RunAsGroupStrategy string
 
 const (
 	// container must run as a particular gid.
 	RunAsGroupStrategyMustRunAs RunAsGroupStrategy = "MustRunAs"
-	// container must run as a non-root gid
+	// container must run as a non-root gid.
 	RunAsGroupStrategyMustRunAsNonRoot RunAsGroupStrategy = "MustRunAsNonRoot"
 	// container may make requests for any gid.
 	RunAsGroupStrategyRunAsAny RunAsGroupStrategy = "RunAsAny"

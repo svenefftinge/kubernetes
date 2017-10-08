@@ -508,7 +508,3 @@ func Convert_networking_NetworkPolicyList_To_v1beta1_NetworkPolicyList(in *netwo
 func Convert_extensions_PodSecurityPolicySpec_To_v1beta1_PodSecurityPolicySpec(in *extensions.PodSecurityPolicySpec, out *extensionsv1beta1.PodSecurityPolicySpec, s conversion.Scope) error {
 	return autoConvert_extensions_PodSecurityPolicySpec_To_v1beta1_PodSecurityPolicySpec(in, out, s)
 }
-
-func Convert_v1beta1_PodSecurityPolicySpec_To_extensions_PodSecurityPolicySpec(in *extensionsv1beta1.PodSecurityPolicySpec, out *extensions.PodSecurityPolicySpec, s conversion.Scope) error {
-	return autoConvert_v1beta1_PodSecurityPolicySpec_To_extensions_PodSecurityPolicySpec(in, out, s)
-}
