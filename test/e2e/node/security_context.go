@@ -59,7 +59,7 @@ func scTestPod(hostIPC bool, hostPID bool) *v1.Pod {
 	return pod
 }
 
-var _ = SIGDescribe("Security Context [Feature:SecurityContext][Feature:RunAsGroup]", func() {
+var _ = SIGDescribe("Security Context [Feature:SecurityContext]", func() {
 	f := framework.NewDefaultFramework("security-context")
 
 	It("should support pod.Spec.SecurityContext.SupplementalGroups", func() {
@@ -82,7 +82,7 @@ var _ = SIGDescribe("Security Context [Feature:SecurityContext][Feature:RunAsGro
 		})
 	})
 
-	It("should support pod.Spec.SecurityContext.RunAsUser And pod.Spec.SecurityContext.RunAsGroup", func() {
+	It("should support pod.Spec.SecurityContext.RunAsUser And pod.Spec.SecurityContext.RunAsGroup [Feature:RunAsGroup]", func() {
 		pod := scTestPod(false, false)
 		userID := int64(1001)
 		groupID := int64(2002)
@@ -111,7 +111,7 @@ var _ = SIGDescribe("Security Context [Feature:SecurityContext][Feature:RunAsGro
 		})
 	})
 
-	It("should support container.SecurityContext.RunAsUser And container.SecurityContext.RunAsGroup", func() {
+	It("should support container.SecurityContext.RunAsUser And container.SecurityContext.RunAsGroup [Feature:RunAsGroup]", func() {
 		pod := scTestPod(false, false)
 		userID := int64(1001)
 		groupID := int64(2001)

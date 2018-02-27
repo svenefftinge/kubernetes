@@ -56,7 +56,6 @@ func (strategy) AllowUnconditionalUpdate() bool {
 
 func (strategy) PrepareForCreate(ctx genericapirequest.Context, obj runtime.Object) {
 	psp := obj.(*extensions.PodSecurityPolicy)
-	psp.Generation = 1
 
 	podsecuritypolicy.DropDisabledAlphaFields(psp)
 }
