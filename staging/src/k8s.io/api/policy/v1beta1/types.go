@@ -201,7 +201,8 @@ type PodSecurityPolicySpec struct {
 	// +optional
 	AllowedFlexVolumes []AllowedFlexVolume `json:"allowedFlexVolumes,omitempty" protobuf:"bytes,18,rep,name=allowedFlexVolumes"`
 	// runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
-	RunAsGroup RunAsGroupStrategyOptions `json:"runAsGroup,omitempty" protobuf:"bytes,19,opt,name=runAsGroup"`
+	// +optional
+	RunAsGroup *RunAsGroupStrategyOptions `json:"runAsGroup,omitempty" protobuf:"bytes,19,opt,name=runAsGroup"`
 }
 
 // defines the host volume conditions that will be enabled by a policy

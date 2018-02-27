@@ -265,8 +265,8 @@ const (
 	// owner: @krmayankk
 	// alpha: v1.10
 	//
-	// Disable runAsNonRootGroup
-	RunAsNonRootGroup utilfeature.Feature = "RunAsNonRootGroup"
+	// Disable runAsGroup
+	RunAsGroup utilfeature.Feature = "RunAsGroup"
 )
 
 func init() {
@@ -330,6 +330,6 @@ var defaultKubernetesFeatureGates = map[utilfeature.Feature]utilfeature.FeatureS
 	ServiceProxyAllowExternalIPs: {Default: false, PreRelease: utilfeature.Deprecated},
 	ReadOnlyAPIDataVolumes:       {Default: true, PreRelease: utilfeature.Deprecated},
 
-	// features to disable runAsNonRootGroup
-	RunAsNonRootGroup: {Default: false, PreRelease: utilfeature.Alpha},
+	// features to disable runAsGroup
+	RunAsGroup: {Default: false, PreRelease: utilfeature.Alpha},
 }

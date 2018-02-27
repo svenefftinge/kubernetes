@@ -257,18 +257,27 @@ func DropDisabledAlphaFields(podSpec *api.PodSpec) {
 
 	DropDisabledVolumeDevicesAlphaFields(podSpec)
 
-	DropDisabledRunAsNonRootGroupField(podSpec)
+	DropDisabledRunAsGroupField(podSpec)
 }
 
-// DropDisabledRunAsNonRootGroupField
-func DropDisabledRunAsNonRootGroupField(podSpec *api.PodSpec) {
-	if !utilfeature.DefaultFeatureGate.Enabled(features.RunAsNonRootGroup) {
-		podSpec.SecurityContext.RunAsNonRootGroup = nil
+// DropDisabledRunAsGroupField
+func DropDisabledRunAsGroupField(podSpec *api.PodSpec) {
+	if !utilfeature.DefaultFeatureGate.Enabled(features.RunAsGroup) {
+		if podSpec.SecurityContext != nil {
+			podSpec.SecurityContext.RunAsNonRootGroup = nil
+			podSpec.SecurityContext.RunAsGroup = nil
+		}
 		for i := range podSpec.Containers {
-			podSpec.Containers[i].SecurityContext.RunAsNonRootGroup = nil
+			if podSpec.Containers[i].SecurityContext != nil {
+				podSpec.Containers[i].SecurityContext.RunAsNonRootGroup = nil
+				podSpec.Containers[i].SecurityContext.RunAsGroup = nil
+			}
 		}
 		for i := range podSpec.InitContainers {
-			podSpec.Containers[i].SecurityContext.RunAsNonRootGroup = nil
+			if podSpec.InitContainers[i].SecurityContext != nil {
+				podSpec.InitContainers[i].SecurityContext.RunAsNonRootGroup = nil
+				podSpec.InitContainers[i].SecurityContext.RunAsGroup = nil
+			}
 		}
 	}
 }
