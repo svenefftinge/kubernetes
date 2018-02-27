@@ -388,9 +388,7 @@ func autoConvert_v1beta1_PodSecurityPolicySpec_To_extensions_PodSecurityPolicySp
 	}
 	out.AllowedHostPaths = *(*[]extensions.AllowedHostPath)(unsafe.Pointer(&in.AllowedHostPaths))
 	out.AllowedFlexVolumes = *(*[]extensions.AllowedFlexVolume)(unsafe.Pointer(&in.AllowedFlexVolumes))
-	if err := Convert_v1beta1_RunAsGroupStrategyOptions_To_extensions_RunAsGroupStrategyOptions(&in.RunAsGroup, &out.RunAsGroup, s); err != nil {
-		return err
-	}
+	out.RunAsGroup = (*extensions.RunAsGroupStrategyOptions)(unsafe.Pointer(in.RunAsGroup))
 	return nil
 }
 
@@ -415,9 +413,7 @@ func autoConvert_extensions_PodSecurityPolicySpec_To_v1beta1_PodSecurityPolicySp
 	if err := Convert_extensions_RunAsUserStrategyOptions_To_v1beta1_RunAsUserStrategyOptions(&in.RunAsUser, &out.RunAsUser, s); err != nil {
 		return err
 	}
-	if err := Convert_extensions_RunAsGroupStrategyOptions_To_v1beta1_RunAsGroupStrategyOptions(&in.RunAsGroup, &out.RunAsGroup, s); err != nil {
-		return err
-	}
+	out.RunAsGroup = (*v1beta1.RunAsGroupStrategyOptions)(unsafe.Pointer(in.RunAsGroup))
 	if err := Convert_extensions_SupplementalGroupsStrategyOptions_To_v1beta1_SupplementalGroupsStrategyOptions(&in.SupplementalGroups, &out.SupplementalGroups, s); err != nil {
 		return err
 	}

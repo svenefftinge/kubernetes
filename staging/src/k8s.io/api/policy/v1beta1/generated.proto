@@ -272,6 +272,7 @@ message PodSecurityPolicySpec {
   repeated AllowedFlexVolume allowedFlexVolumes = 18;
 
   // runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+  // +optional
   optional RunAsGroupStrategyOptions runAsGroup = 19;
 }
 

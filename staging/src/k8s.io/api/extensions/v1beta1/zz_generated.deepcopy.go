@@ -1204,7 +1204,15 @@ func (in *PodSecurityPolicySpec) DeepCopyInto(out *PodSecurityPolicySpec) {
 		*out = make([]AllowedFlexVolume, len(*in))
 		copy(*out, *in)
 	}
-	in.RunAsGroup.DeepCopyInto(&out.RunAsGroup)
+	if in.RunAsGroup != nil {
+		in, out := &in.RunAsGroup, &out.RunAsGroup
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(RunAsGroupStrategyOptions)
+			(*in).DeepCopyInto(*out)
+		}
+	}
 	return
 }
 

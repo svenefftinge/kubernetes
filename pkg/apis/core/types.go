@@ -2691,7 +2691,8 @@ type PodSecurityContext struct {
 	// The UID to run the entrypoint of the container process.
 	// Defaults to user specified in image metadata if unspecified.
 	// May also be set in SecurityContext.  If set in both SecurityContext and
-	// PodSecurityContext, the value specified in SecurityContext takes precedence.
+	// PodSecurityContext, the value specified in SecurityContext takes precedence
+	// for that container.
 	// +optional
 	RunAsUser *int64
 	// The GID to run the entrypoint of the container process.

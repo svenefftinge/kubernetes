@@ -632,7 +632,9 @@ func ValidatePodSecurityPolicySpec(spec *extensions.PodSecurityPolicySpec, fldPa
 	allErrs := field.ErrorList{}
 
 	allErrs = append(allErrs, validatePSPRunAsUser(fldPath.Child("runAsUser"), &spec.RunAsUser)...)
-	allErrs = append(allErrs, validatePSPRunAsGroup(fldPath.Child("runAsGroup"), &spec.RunAsGroup)...)
+	if spec.RunAsGroup != nil {
+		allErrs = append(allErrs, validatePSPRunAsGroup(fldPath.Child("runAsGroup"), spec.RunAsGroup)...)
+	}
 	allErrs = append(allErrs, validatePSPSELinux(fldPath.Child("seLinux"), &spec.SELinux)...)
 	allErrs = append(allErrs, validatePSPSupplementalGroup(fldPath.Child("supplementalGroups"), &spec.SupplementalGroups)...)
 	allErrs = append(allErrs, validatePSPFSGroup(fldPath.Child("fsGroup"), &spec.FSGroup)...)

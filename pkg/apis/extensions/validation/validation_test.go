@@ -2333,7 +2333,7 @@ func TestValidatePodSecurityPolicy(t *testing.T) {
 				RunAsUser: extensions.RunAsUserStrategyOptions{
 					Rule: extensions.RunAsUserStrategyRunAsAny,
 				},
-				RunAsGroup: extensions.RunAsGroupStrategyOptions{
+				RunAsGroup: &extensions.RunAsGroupStrategyOptions{
 					Rule: extensions.RunAsGroupStrategyRunAsAny,
 				},
 				FSGroup: extensions.FSGroupStrategyOptions{
@@ -2742,7 +2742,7 @@ func TestValidatePSPVolumes(t *testing.T) {
 				RunAsUser: extensions.RunAsUserStrategyOptions{
 					Rule: extensions.RunAsUserStrategyRunAsAny,
 				},
-				RunAsGroup: extensions.RunAsGroupStrategyOptions{
+				RunAsGroup: &extensions.RunAsGroupStrategyOptions{
 					Rule: extensions.RunAsGroupStrategyRunAsAny,
 				},
 				FSGroup: extensions.FSGroupStrategyOptions{

@@ -839,7 +839,7 @@ type PodSecurityPolicySpec struct {
 	// RunAsUser is the strategy that will dictate the allowable RunAsUser values that may be set.
 	RunAsUser RunAsUserStrategyOptions
 	// RunAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
-	RunAsGroup RunAsGroupStrategyOptions
+	RunAsGroup *RunAsGroupStrategyOptions
 	// SupplementalGroups is the strategy that will dictate what supplemental groups are used by the SecurityContext.
 	SupplementalGroups SupplementalGroupsStrategyOptions
 	// FSGroup is the strategy that will dictate what fs group is used by the SecurityContext.

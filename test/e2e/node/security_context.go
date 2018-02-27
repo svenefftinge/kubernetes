@@ -59,7 +59,7 @@ func scTestPod(hostIPC bool, hostPID bool) *v1.Pod {
 	return pod
 }
 
-var _ = SIGDescribe("Security Context [Feature:SecurityContext]", func() {
+var _ = SIGDescribe("Security Context [Feature:SecurityContext][Feature:RunAsGroup]", func() {
 	f := framework.NewDefaultFramework("security-context")
 
 	It("should support pod.Spec.SecurityContext.SupplementalGroups", func() {

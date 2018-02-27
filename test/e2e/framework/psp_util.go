@@ -61,7 +61,7 @@ func PrivilegedPSP(name string) *extensionsv1beta1.PodSecurityPolicy {
 			RunAsUser: extensionsv1beta1.RunAsUserStrategyOptions{
 				Rule: extensionsv1beta1.RunAsUserStrategyRunAsAny,
 			},
-			RunAsGroup: extensionsv1beta1.RunAsGroupStrategyOptions{
+			RunAsGroup: &extensionsv1beta1.RunAsGroupStrategyOptions{
 				Rule: extensionsv1beta1.RunAsGroupStrategyRunAsAny,
 			},
 			SELinux: extensionsv1beta1.SELinuxStrategyOptions{

@@ -910,7 +910,15 @@ func (in *PodSecurityPolicySpec) DeepCopyInto(out *PodSecurityPolicySpec) {
 	}
 	in.SELinux.DeepCopyInto(&out.SELinux)
 	in.RunAsUser.DeepCopyInto(&out.RunAsUser)
-	in.RunAsGroup.DeepCopyInto(&out.RunAsGroup)
+	if in.RunAsGroup != nil {
+		in, out := &in.RunAsGroup, &out.RunAsGroup
+		if *in == nil {
+			*out = nil
+		} else {
+			*out = new(RunAsGroupStrategyOptions)
+			(*in).DeepCopyInto(*out)
+		}
+	}
 	in.SupplementalGroups.DeepCopyInto(&out.SupplementalGroups)
 	in.FSGroup.DeepCopyInto(&out.FSGroup)
 	if in.DefaultAllowPrivilegeEscalation != nil {

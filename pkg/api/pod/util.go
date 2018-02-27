@@ -260,7 +260,8 @@ func DropDisabledAlphaFields(podSpec *api.PodSpec) {
 	DropDisabledRunAsGroupField(podSpec)
 }
 
-// DropDisabledRunAsGroupField
+// DropDisabledRunAsGroupField removes disabled fields from PodSpec related
+// to RunAsGroup
 func DropDisabledRunAsGroupField(podSpec *api.PodSpec) {
 	if !utilfeature.DefaultFeatureGate.Enabled(features.RunAsGroup) {
 		if podSpec.SecurityContext != nil {
