@@ -312,6 +312,8 @@ var defaultKubernetesFeatureGates = map[utilfeature.Feature]utilfeature.FeatureS
 	TokenRequest:                                {Default: false, PreRelease: utilfeature.Alpha},
 	CRIContainerLogRotation:                     {Default: false, PreRelease: utilfeature.Alpha},
 	GCERegionalPersistentDisk:                   {Default: true, PreRelease: utilfeature.Beta},
+	// features to disable runAsGroup
+	RunAsGroup: {Default: false, PreRelease: utilfeature.Alpha},
 
 	// inherited features from generic apiserver, relisted here to get a conflict if it is changed
 	// unintentionally on either side:
@@ -329,7 +331,4 @@ var defaultKubernetesFeatureGates = map[utilfeature.Feature]utilfeature.FeatureS
 	// features that enable backwards compatibility but are scheduled to be removed
 	ServiceProxyAllowExternalIPs: {Default: false, PreRelease: utilfeature.Deprecated},
 	ReadOnlyAPIDataVolumes:       {Default: true, PreRelease: utilfeature.Deprecated},
-
-	// features to disable runAsGroup
-	RunAsGroup: {Default: false, PreRelease: utilfeature.Alpha},
 }
