@@ -2685,7 +2685,7 @@ type PodSecurityContext struct {
 	// If unspecified, the container runtime will allocate a random SELinux context for each
 	// container.  May also be set in SecurityContext.  If set in
 	// both SecurityContext and PodSecurityContext, the value specified in SecurityContext
-	// takes precedence.
+	// takes precedence for that container.
 	// +optional
 	SELinuxOptions *SELinuxOptions
 	// The UID to run the entrypoint of the container process.
