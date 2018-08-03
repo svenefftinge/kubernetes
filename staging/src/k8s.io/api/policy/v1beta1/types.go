@@ -221,6 +221,8 @@ type PodSecurityPolicySpec struct {
 	// e.g. "foo.*" forbids "foo.bar", "foo.baz", etc.
 	// +optional
 	ForbiddenSysctls []string `json:"forbiddenSysctls,omitempty" protobuf:"bytes,20,rep,name=forbiddenSysctls"`
+	// runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+	RunAsGroup RunAsGroupStrategyOptions `json:"runAsGroup" protobuf:"bytes,21,opt,name=runAsGroup"`
 }
 
 // AllowedHostPath defines the host volume conditions that will be enabled by a policy
@@ -314,6 +316,16 @@ type RunAsUserStrategyOptions struct {
 	Ranges []IDRange `json:"ranges,omitempty" protobuf:"bytes,2,rep,name=ranges"`
 }
 
+// RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
+type RunAsGroupStrategyOptions struct {
+	// rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+	Rule RunAsGroupStrategy `json:"rule" protobuf:"bytes,1,opt,name=rule,casttype=RunAsGroupStrategy"`
+	// ranges are the allowed ranges of uids that may be used. If you would like to force a single uid
+	// then supply a single range with the same start and end. Required for MustRunAs.
+	// +optional
+	Ranges []IDRange `json:"ranges,omitempty" protobuf:"bytes,2,rep,name=ranges"`
+}
+
 // IDRange provides a min/max of an allowed range of IDs.
 type IDRange struct {
 	// min is the start of the range, inclusive.
@@ -333,6 +345,19 @@ const (
 	RunAsUserStrategyMustRunAsNonRoot RunAsUserStrategy = "MustRunAsNonRoot"
 	// RunAsUserStrategyRunAsAny means that container may make requests for any uid.
 	RunAsUserStrategyRunAsAny RunAsUserStrategy = "RunAsAny"
+)
+
+// RunAsGroupStrategy denotes strategy types for generating RunAsGroup values for a
+// Security Context.
+type RunAsGroupStrategy string
+
+const (
+	// RunAsGroupStrategyMustRunAs means that container must run as a particular gid.
+	RunAsGroupStrategyMustRunAs RunAsGroupStrategy = "MustRunAs"
+	// RunAsUserStrategyMustRunAsNonRoot means that container must run as a non-root gid.
+	RunAsGroupStrategyMustRunAsNonRoot RunAsGroupStrategy = "MustRunAsNonRoot"
+	// RunAsUserStrategyRunAsAny means that container may make requests for any gid.
+	RunAsGroupStrategyRunAsAny RunAsGroupStrategy = "RunAsAny"
 )
 
 // FSGroupStrategyOptions defines the strategy type and options used to create the strategy.

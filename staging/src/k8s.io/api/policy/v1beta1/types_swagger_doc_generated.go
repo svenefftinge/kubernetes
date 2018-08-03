@@ -171,10 +171,21 @@ var map_PodSecurityPolicySpec = map[string]string{
 	"allowedFlexVolumes":              "allowedFlexVolumes is a whitelist of allowed Flexvolumes.  Empty or nil indicates that all Flexvolumes may be used.  This parameter is effective only when the usage of the Flexvolumes is allowed in the \"volumes\" field.",
 	"allowedUnsafeSysctls":            "allowedUnsafeSysctls is a list of explicitly allowed unsafe sysctls, defaults to none. Each entry is either a plain sysctl name or ends in \"*\" in which case it is considered as a prefix of allowed sysctls. Single * means all unsafe sysctls are allowed. Kubelet has to whitelist all allowed unsafe sysctls explicitly to avoid rejection.\n\nExamples: e.g. \"foo/*\" allows \"foo/bar\", \"foo/baz\", etc. e.g. \"foo.*\" allows \"foo.bar\", \"foo.baz\", etc.",
 	"forbiddenSysctls":                "forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in \"*\" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden.\n\nExamples: e.g. \"foo/*\" forbids \"foo/bar\", \"foo/baz\", etc. e.g. \"foo.*\" forbids \"foo.bar\", \"foo.baz\", etc.",
+	"runAsGroup":                      "runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.",
 }
 
 func (PodSecurityPolicySpec) SwaggerDoc() map[string]string {
 	return map_PodSecurityPolicySpec
+}
+
+var map_RunAsGroupStrategyOptions = map[string]string{
+	"":       "RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.",
+	"rule":   "rule is the strategy that will dictate the allowable RunAsUser values that may be set.",
+	"ranges": "ranges are the allowed ranges of uids that may be used. If you would like to force a single uid then supply a single range with the same start and end. Required for MustRunAs.",
+}
+
+func (RunAsGroupStrategyOptions) SwaggerDoc() map[string]string {
+	return map_RunAsGroupStrategyOptions
 }
 
 var map_RunAsUserStrategyOptions = map[string]string{

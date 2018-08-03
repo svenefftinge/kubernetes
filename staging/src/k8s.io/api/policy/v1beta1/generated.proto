@@ -297,6 +297,20 @@ message PodSecurityPolicySpec {
   // e.g. "foo.*" forbids "foo.bar", "foo.baz", etc.
   // +optional
   repeated string forbiddenSysctls = 20;
+
+  // runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+  optional RunAsGroupStrategyOptions runAsGroup = 21;
+}
+
+// RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
+message RunAsGroupStrategyOptions {
+  // rule is the strategy that will dictate the allowable RunAsUser values that may be set.
+  optional string rule = 1;
+
+  // ranges are the allowed ranges of uids that may be used. If you would like to force a single uid
+  // then supply a single range with the same start and end. Required for MustRunAs.
+  // +optional
+  repeated IDRange ranges = 2;
 }
 
 // RunAsUserStrategyOptions defines the strategy type and any options used to create the strategy.

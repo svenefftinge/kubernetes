@@ -228,6 +228,8 @@ type PodSecurityPolicySpec struct {
 	// e.g. "foo.*" forbids "foo.bar", "foo.baz", etc.
 	// +optional
 	ForbiddenSysctls []string
+	// RunAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set.
+	RunAsGroup RunAsGroupStrategyOptions
 }
 
 // AllowedHostPath defines the host volume conditions that will be enabled by a policy
@@ -331,6 +333,16 @@ type RunAsUserStrategyOptions struct {
 	Ranges []IDRange
 }
 
+// RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy.
+type RunAsGroupStrategyOptions struct {
+	// Rule is the strategy that will dictate the allowable RunAsGroup values that may be set.
+	Rule RunAsGroupStrategy
+	// Ranges are the allowed ranges of gids that may be used. If you would like to force a single gid
+	// then supply a single range with the same start and end. Required for MustRunAs.
+	// +optional
+	Ranges []IDRange
+}
+
 // IDRange provides a min/max of an allowed range of IDs.
 type IDRange struct {
 	// Min is the start of the range, inclusive.
@@ -350,6 +362,19 @@ const (
 	RunAsUserStrategyMustRunAsNonRoot RunAsUserStrategy = "MustRunAsNonRoot"
 	// RunAsUserStrategyRunAsAny means that container may make requests for any uid.
 	RunAsUserStrategyRunAsAny RunAsUserStrategy = "RunAsAny"
+)
+
+// RunAsGroupStrategy denotes strategy types for generating RunAsGroup values for a
+// SecurityContext.
+type RunAsGroupStrategy string
+
+const (
+	// RunAsGroupStrategyMustRunAs means that container must run as a particular uid.
+	RunAsGroupStrategyMustRunAs RunAsGroupStrategy = "MustRunAs"
+	// RunAsGroupStrategyMustRunAsNonRoot means that container must run as a non-root uid
+	RunAsGroupStrategyMustRunAsNonRoot RunAsGroupStrategy = "MustRunAsNonRoot"
+	// RunAsGroupStrategyRunAsAny means that container may make requests for any uid.
+	RunAsGroupStrategyRunAsAny RunAsGroupStrategy = "RunAsAny"
 )
 
 // FSGroupStrategyOptions defines the strategy type and options used to create the strategy.

@@ -10411,7 +10411,8 @@
      "seLinux",
      "runAsUser",
      "supplementalGroups",
-     "fsGroup"
+     "fsGroup",
+     "runAsGroup"
     ],
     "properties": {
      "privileged": {
@@ -10520,6 +10521,10 @@
        "type": "string"
       },
       "description": "forbiddenSysctls is a list of explicitly forbidden sysctls, defaults to none. Each entry is either a plain sysctl name or ends in \"*\" in which case it is considered as a prefix of forbidden sysctls. Single * means all sysctls are forbidden.\n\nExamples: e.g. \"foo/*\" forbids \"foo/bar\", \"foo/baz\", etc. e.g. \"foo.*\" forbids \"foo.bar\", \"foo.baz\", etc."
+     },
+     "runAsGroup": {
+      "$ref": "v1beta1.RunAsGroupStrategyOptions",
+      "description": "runAsGroup is the strategy that will dictate the allowable RunAsGroup values that may be set."
      }
     }
    },
@@ -10662,6 +10667,26 @@
      "driver": {
       "type": "string",
       "description": "driver is the name of the Flexvolume driver."
+     }
+    }
+   },
+   "v1beta1.RunAsGroupStrategyOptions": {
+    "id": "v1beta1.RunAsGroupStrategyOptions",
+    "description": "RunAsGroupStrategyOptions defines the strategy type and any options used to create the strategy. Deprecated: use RunAsGroupStrategyOptions from policy API Group instead.",
+    "required": [
+     "rule"
+    ],
+    "properties": {
+     "rule": {
+      "type": "string",
+      "description": "rule is the strategy that will dictate the allowable RunAsGroup values that may be set."
+     },
+     "ranges": {
+      "type": "array",
+      "items": {
+       "$ref": "v1beta1.IDRange"
+      },
+      "description": "ranges are the allowed ranges of gids that may be used. If you would like to force a single gid then supply a single range with the same start and end. Required for MustRunAs."
      }
     }
    },
