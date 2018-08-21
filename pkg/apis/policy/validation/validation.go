@@ -109,6 +109,7 @@ func ValidatePodSecurityPolicySpec(spec *policy.PodSecurityPolicySpec, fldPath *
 	allErrs := field.ErrorList{}
 
 	allErrs = append(allErrs, validatePSPRunAsUser(fldPath.Child("runAsUser"), &spec.RunAsUser)...)
+	allErrs = append(allErrs, validatePSPRunAsGroup(fldPath.Child("runAsGroup"), &spec.RunAsGroup)...)
 	allErrs = append(allErrs, validatePSPSELinux(fldPath.Child("seLinux"), &spec.SELinux)...)
 	allErrs = append(allErrs, validatePSPSupplementalGroup(fldPath.Child("supplementalGroups"), &spec.SupplementalGroups)...)
 	allErrs = append(allErrs, validatePSPFSGroup(fldPath.Child("fsGroup"), &spec.FSGroup)...)
@@ -228,6 +229,28 @@ func validatePSPRunAsUser(fldPath *field.Path, runAsUser *policy.RunAsUserStrate
 	// validate range settings
 	for idx, rng := range runAsUser.Ranges {
 		allErrs = append(allErrs, validateUserIDRange(fldPath.Child("ranges").Index(idx), rng)...)
+	}
+
+	return allErrs
+}
+
+// validatePSPRunAsGroup validates the RunAsGroup fields of PodSecurityPolicy.
+func validatePSPRunAsGroup(fldPath *field.Path, runAsGroup *policy.RunAsGroupStrategyOptions) field.ErrorList {
+	allErrs := field.ErrorList{}
+
+	// ensure the user strategy has a valid rule
+	supportedRunAsGroupRules := sets.NewString(
+		string(policy.RunAsGroupStrategyMustRunAs),
+		string(policy.RunAsGroupStrategyMustRunAsNonRoot),
+		string(policy.RunAsGroupStrategyRunAsAny),
+	)
+	if !supportedRunAsGroupRules.Has(string(runAsGroup.Rule)) {
+		allErrs = append(allErrs, field.NotSupported(fldPath.Child("rule"), runAsGroup.Rule, supportedRunAsGroupRules.List()))
+	}
+
+	// validate range settings
+	for idx, rng := range runAsGroup.Ranges {
+		allErrs = append(allErrs, validateGroupIDRange(fldPath.Child("ranges").Index(idx), rng)...)
 	}
 
 	return allErrs

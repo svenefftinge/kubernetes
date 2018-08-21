@@ -47,6 +47,11 @@ func (f *simpleStrategyFactory) CreateStrategies(psp *policy.PodSecurityPolicy, 
 		errs = append(errs, err)
 	}
 
+	groupStrat, err := createGroupStrategy(&psp.Spec.RunAsGroup)
+	if err != nil {
+		errs = append(errs, err)
+	}
+
 	seLinuxStrat, err := createSELinuxStrategy(&psp.Spec.SELinux)
 	if err != nil {
 		errs = append(errs, err)
@@ -85,6 +90,7 @@ func (f *simpleStrategyFactory) CreateStrategies(psp *policy.PodSecurityPolicy, 
 
 	strategies := &ProviderStrategies{
 		RunAsUserStrategy:         userStrat,
+		RunAsGroupStrategy:        groupStrat,
 		SELinuxStrategy:           seLinuxStrat,
 		AppArmorStrategy:          appArmorStrat,
 		FSGroupStrategy:           fsGroupStrat,
@@ -108,6 +114,20 @@ func createUserStrategy(opts *policy.RunAsUserStrategyOptions) (user.RunAsUserSt
 		return user.NewRunAsAny(opts)
 	default:
 		return nil, fmt.Errorf("Unrecognized RunAsUser strategy type %s", opts.Rule)
+	}
+}
+
+// createGroupStrategy creates a new group strategy.
+func createGroupStrategy(opts *policy.RunAsGroupStrategyOptions) (group.GroupStrategy, error) {
+	switch opts.Rule {
+	case policy.RunAsGroupStrategyMustRunAs:
+		return group.NewMustRunAs(opts.Ranges)
+	case policy.RunAsGroupStrategyMustRunAsNonRoot:
+		return group.NewRunAsNonRoot(opts)
+	case policy.RunAsGroupStrategyRunAsAny:
+		return group.NewRunAsAny()
+	default:
+		return nil, fmt.Errorf("Unrecognized RunAsGroup strategy type %s", opts.Rule)
 	}
 }
 

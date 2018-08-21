@@ -269,7 +269,7 @@ var etcdStorageData = map[schema.GroupVersionResource]struct {
 		expectedGVK:      gvkP("apps", "v1", "DaemonSet"),
 	},
 	gvr("extensions", "v1beta1", "podsecuritypolicies"): {
-		stub:             `{"metadata": {"name": "psp1"}, "spec": {"fsGroup": {"rule": "RunAsAny"}, "privileged": true, "runAsUser": {"rule": "RunAsAny"}, "seLinux": {"rule": "MustRunAs"}, "supplementalGroups": {"rule": "RunAsAny"}}}`,
+		stub:             `{"metadata": {"name": "psp1"}, "spec": {"fsGroup": {"rule": "RunAsAny"}, "privileged": true, "runAsUser": {"rule": "RunAsAny"}, "runAsGroup": {"rule": "RunAsAny"}, "seLinux": {"rule": "MustRunAs"}, "supplementalGroups": {"rule": "RunAsAny"}}}`,
 		expectedEtcdPath: "/registry/podsecuritypolicy/psp1",
 		expectedGVK:      gvkP("policy", "v1beta1", "PodSecurityPolicy"),
 	},
@@ -307,7 +307,7 @@ var etcdStorageData = map[schema.GroupVersionResource]struct {
 		expectedEtcdPath: "/registry/poddisruptionbudgets/etcdstoragepathtestnamespace/pdb1",
 	},
 	gvr("policy", "v1beta1", "podsecuritypolicies"): {
-		stub:             `{"metadata": {"name": "psp2"}, "spec": {"fsGroup": {"rule": "RunAsAny"}, "privileged": true, "runAsUser": {"rule": "RunAsAny"}, "seLinux": {"rule": "MustRunAs"}, "supplementalGroups": {"rule": "RunAsAny"}}}`,
+		stub:             `{"metadata": {"name": "psp2"}, "spec": {"fsGroup": {"rule": "RunAsAny"}, "privileged": true, "runAsUser": {"rule": "RunAsAny"}, "runAsGroup": {"rule": "RunAsAny"}, "seLinux": {"rule": "MustRunAs"}, "supplementalGroups": {"rule": "RunAsAny"}}}`,
 		expectedEtcdPath: "/registry/podsecuritypolicy/psp2",
 	},
 	// --

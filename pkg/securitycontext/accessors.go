@@ -29,6 +29,7 @@ type PodSecurityContextAccessor interface {
 	HostIPC() bool
 	SELinuxOptions() *api.SELinuxOptions
 	RunAsUser() *int64
+	RunAsGroup() *int64
 	RunAsNonRoot() *bool
 	SupplementalGroups() []int64
 	FSGroup() *int64
@@ -142,6 +143,20 @@ func (w *podSecurityContextWrapper) SetRunAsUser(v *int64) {
 	w.ensurePodSC()
 	w.podSC.RunAsUser = v
 }
+func (w *podSecurityContextWrapper) RunAsGroup() *int64 {
+	if w.podSC == nil {
+		return nil
+	}
+	return w.podSC.RunAsGroup
+}
+func (w *podSecurityContextWrapper) SetRunAsGroup(v *int64) {
+	if w.podSC == nil && v == nil {
+		return
+	}
+	w.ensurePodSC()
+	w.podSC.RunAsGroup = v
+}
+
 func (w *podSecurityContextWrapper) RunAsNonRoot() *bool {
 	if w.podSC == nil {
 		return nil
@@ -190,6 +205,7 @@ type ContainerSecurityContextAccessor interface {
 	Privileged() *bool
 	SELinuxOptions() *api.SELinuxOptions
 	RunAsUser() *int64
+	RunAsGroup() *int64
 	RunAsNonRoot() *bool
 	ReadOnlyRootFilesystem() *bool
 	AllowPrivilegeEscalation() *bool
@@ -204,6 +220,7 @@ type ContainerSecurityContextMutator interface {
 	SetPrivileged(*bool)
 	SetSELinuxOptions(*api.SELinuxOptions)
 	SetRunAsUser(*int64)
+	SetRunAsGroup(*int64)
 	SetRunAsNonRoot(*bool)
 	SetReadOnlyRootFilesystem(*bool)
 	SetAllowPrivilegeEscalation(*bool)
@@ -283,6 +300,20 @@ func (w *containerSecurityContextWrapper) SetRunAsUser(v *int64) {
 	w.ensureContainerSC()
 	w.containerSC.RunAsUser = v
 }
+func (w *containerSecurityContextWrapper) RunAsGroup() *int64 {
+	if w.containerSC == nil {
+		return nil
+	}
+	return w.containerSC.RunAsGroup
+}
+func (w *containerSecurityContextWrapper) SetRunAsGroup(v *int64) {
+	if w.containerSC == nil && v == nil {
+		return
+	}
+	w.ensureContainerSC()
+	w.containerSC.RunAsGroup = v
+}
+
 func (w *containerSecurityContextWrapper) RunAsNonRoot() *bool {
 	if w.containerSC == nil {
 		return nil
@@ -378,6 +409,18 @@ func (w *effectiveContainerSecurityContextWrapper) SetRunAsUser(v *int64) {
 		w.containerSC.SetRunAsUser(v)
 	}
 }
+func (w *effectiveContainerSecurityContextWrapper) RunAsGroup() *int64 {
+	if v := w.containerSC.RunAsGroup(); v != nil {
+		return v
+	}
+	return w.podSC.RunAsGroup()
+}
+func (w *effectiveContainerSecurityContextWrapper) SetRunAsGroup(v *int64) {
+	if !reflect.DeepEqual(w.RunAsGroup(), v) {
+		w.containerSC.SetRunAsGroup(v)
+	}
+}
+
 func (w *effectiveContainerSecurityContextWrapper) RunAsNonRoot() *bool {
 	if v := w.containerSC.RunAsNonRoot(); v != nil {
 		return v

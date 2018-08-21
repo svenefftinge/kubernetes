@@ -59,7 +59,7 @@ func (s *mustRunAs) GenerateSingle(_ *api.Pod) (*int64, error) {
 // Validate ensures that the specified values fall within the range of the strategy.
 // Groups are passed in here to allow this strategy to support multiple group fields (fsgroup and
 // supplemental groups).
-func (s *mustRunAs) Validate(fldPath *field.Path, _ *api.Pod, groups []int64) field.ErrorList {
+func (s *mustRunAs) Validate(fldPath *field.Path, _ *api.Pod, _ *bool, groups []int64) field.ErrorList {
 	allErrs := field.ErrorList{}
 
 	if len(groups) == 0 && len(s.ranges) > 0 {

@@ -113,6 +113,7 @@ func TestValidate(t *testing.T) {
 	tests := map[string]struct {
 		ranges        []policy.IDRange
 		groups        []int64
+		nonRoot       bool
 		expectedError string
 	}{
 		"nil security context": {
@@ -166,7 +167,7 @@ func TestValidate(t *testing.T) {
 		if err != nil {
 			t.Errorf("error creating strategy for %s: %v", k, err)
 		}
-		errs := s.Validate(field.NewPath(""), nil, v.groups)
+		errs := s.Validate(field.NewPath(""), nil, &v.nonRoot, v.groups)
 		if v.expectedError == "" && len(errs) > 0 {
 			t.Errorf("unexpected errors for %s: %v", k, errs)
 		}

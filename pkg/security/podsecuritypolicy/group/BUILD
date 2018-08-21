@@ -11,6 +11,7 @@ go_library(
     srcs = [
         "doc.go",
         "mustrunas.go",
+        "nonroot.go",
         "runasany.go",
         "types.go",
     ],
@@ -27,10 +28,12 @@ go_test(
     name = "go_default_test",
     srcs = [
         "mustrunas_test.go",
+        "nonroot_test.go",
         "runasany_test.go",
     ],
     embed = [":go_default_library"],
     deps = [
+        "//pkg/apis/core:go_default_library",
         "//pkg/apis/policy:go_default_library",
         "//staging/src/k8s.io/apimachinery/pkg/util/validation/field:go_default_library",
     ],

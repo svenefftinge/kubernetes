@@ -121,6 +121,14 @@ func (s *simpleProvider) DefaultContainerSecurityContext(pod *api.Pod, container
 		sc.SetRunAsUser(uid)
 	}
 
+	if sc.RunAsGroup() == nil {
+		gid, err := s.strategies.RunAsGroupStrategy.GenerateSingle(pod)
+		if err != nil {
+			return err
+		}
+		sc.SetRunAsGroup(gid)
+	}
+
 	if sc.SELinuxOptions() == nil {
 		seLinux, err := s.strategies.SELinuxStrategy.Generate(pod, container)
 		if err != nil {
@@ -183,8 +191,8 @@ func (s *simpleProvider) ValidatePod(pod *api.Pod) field.ErrorList {
 	if fsGroup := sc.FSGroup(); fsGroup != nil {
 		fsGroups = []int64{*fsGroup}
 	}
-	allErrs = append(allErrs, s.strategies.FSGroupStrategy.Validate(scPath.Child("fsGroup"), pod, fsGroups)...)
-	allErrs = append(allErrs, s.strategies.SupplementalGroupStrategy.Validate(scPath.Child("supplementalGroups"), pod, sc.SupplementalGroups())...)
+	allErrs = append(allErrs, s.strategies.FSGroupStrategy.Validate(scPath.Child("fsGroup"), pod, sc.RunAsNonRoot(), fsGroups)...)
+	allErrs = append(allErrs, s.strategies.SupplementalGroupStrategy.Validate(scPath.Child("supplementalGroups"), pod, sc.RunAsNonRoot(), sc.SupplementalGroups())...)
 	allErrs = append(allErrs, s.strategies.SeccompStrategy.ValidatePod(pod)...)
 
 	allErrs = append(allErrs, s.strategies.SELinuxStrategy.Validate(scPath.Child("seLinuxOptions"), pod, nil, sc.SELinuxOptions())...)
@@ -280,6 +288,12 @@ func (s *simpleProvider) ValidateContainer(pod *api.Pod, container *api.Containe
 
 	scPath := containerPath.Child("securityContext")
 	allErrs = append(allErrs, s.strategies.RunAsUserStrategy.Validate(scPath, pod, container, sc.RunAsNonRoot(), sc.RunAsUser())...)
+
+	var runAsGroups []int64
+	if sc.RunAsGroup() != nil {
+		runAsGroups = []int64{*sc.RunAsGroup()}
+	}
+	allErrs = append(allErrs, s.strategies.RunAsGroupStrategy.Validate(scPath, pod, sc.RunAsNonRoot(), runAsGroups)...)
 	allErrs = append(allErrs, s.strategies.SELinuxStrategy.Validate(scPath.Child("seLinuxOptions"), pod, container, sc.SELinuxOptions())...)
 	allErrs = append(allErrs, s.strategies.AppArmorStrategy.Validate(pod, container)...)
 	allErrs = append(allErrs, s.strategies.SeccompStrategy.ValidateContainer(pod, container)...)

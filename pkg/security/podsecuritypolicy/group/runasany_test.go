@@ -50,12 +50,12 @@ func TestRunAsAnyGenerateSingle(t *testing.T) {
 	}
 }
 
-func TestRunAsAnyValidte(t *testing.T) {
+func TestRunAsAnyValidate(t *testing.T) {
 	s, err := NewRunAsAny()
 	if err != nil {
 		t.Fatalf("unexpected error initializing NewRunAsAny %v", err)
 	}
-	errs := s.Validate(field.NewPath(""), nil, nil)
+	errs := s.Validate(field.NewPath(""), nil, nil, nil)
 	if len(errs) != 0 {
 		t.Errorf("unexpected errors: %v", errs)
 	}

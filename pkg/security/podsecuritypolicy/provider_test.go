@@ -62,6 +62,9 @@ func TestDefaultPodSecurityContextNonmutating(t *testing.T) {
 				RunAsUser: policy.RunAsUserStrategyOptions{
 					Rule: policy.RunAsUserStrategyRunAsAny,
 				},
+				RunAsGroup: policy.RunAsGroupStrategyOptions{
+					Rule: policy.RunAsGroupStrategyRunAsAny,
+				},
 				SELinux: policy.SELinuxStrategyOptions{
 					Rule: policy.SELinuxStrategyRunAsAny,
 				},
@@ -133,6 +136,9 @@ func TestDefaultContainerSecurityContextNonmutating(t *testing.T) {
 					AllowPrivilegeEscalation: true,
 					RunAsUser: policy.RunAsUserStrategyOptions{
 						Rule: policy.RunAsUserStrategyRunAsAny,
+					},
+					RunAsGroup: policy.RunAsGroupStrategyOptions{
+						Rule: policy.RunAsGroupStrategyRunAsAny,
 					},
 					SELinux: policy.SELinuxStrategyOptions{
 						Rule: policy.SELinuxStrategyRunAsAny,
@@ -1098,6 +1104,9 @@ func defaultPSP() *policy.PodSecurityPolicy {
 		Spec: policy.PodSecurityPolicySpec{
 			RunAsUser: policy.RunAsUserStrategyOptions{
 				Rule: policy.RunAsUserStrategyRunAsAny,
+			},
+			RunAsGroup: policy.RunAsGroupStrategyOptions{
+				Rule: policy.RunAsGroupStrategyRunAsAny,
 			},
 			SELinux: policy.SELinuxStrategyOptions{
 				Rule: policy.SELinuxStrategyRunAsAny,
