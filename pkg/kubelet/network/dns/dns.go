@@ -26,6 +26,7 @@ import (
 	"strings"
 
 	"k8s.io/api/core/v1"
+	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/kubernetes/pkg/apis/core/validation"
@@ -209,6 +210,7 @@ func parseResolvConf(reader io.Reader) (nameservers []string, searches []string,
 	// Each option is recorded as an element in the array.
 	options = []string{}
 
+	allErrors := []error{}
 	lines := strings.Split(string(file), "\n")
 	for l := range lines {
 		trimmed := strings.TrimSpace(lines[l])
@@ -219,18 +221,32 @@ func parseResolvConf(reader io.Reader) (nameservers []string, searches []string,
 		if len(fields) == 0 {
 			continue
 		}
-		if fields[0] == "nameserver" && len(fields) >= 2 {
-			nameservers = append(nameservers, fields[1])
+		if fields[0] == "nameserver" {
+			if len(fields) >= 2 {
+				nameservers = append(nameservers, fields[1])
+			} else {
+				allErrors = append(allErrors, fmt.Errorf("nameserver list is empty "))
+			}
 		}
 		if fields[0] == "search" {
-			searches = fields[1:]
+			if len(fields) >= 2 {
+				searches = fields[1:]
+			} else {
+				allErrors = append(allErrors, fmt.Errorf("search list is empty "))
+			}
 		}
+
 		if fields[0] == "options" {
-			options = fields[1:]
+			if len(fields) >= 2 {
+				options = fields[1:]
+			} else {
+				allErrors = append(allErrors, fmt.Errorf("options list is empty "))
+			}
 		}
+
 	}
 
-	return nameservers, searches, options, nil
+	return nameservers, searches, options, utilerrors.NewAggregate(allErrors)
 }
 
 func (c *Configurer) getHostDNSConfig(pod *v1.Pod) (*runtimeapi.DNSConfig, error) {
@@ -293,11 +309,11 @@ func mergeDNSOptions(existingDNSConfigOptions []string, dnsConfigOptions []v1.Po
 		}
 	}
 	for _, op := range dnsConfigOptions {
+		opValue := ""
 		if op.Value != nil {
-			optionsMap[op.Name] = *op.Value
-		} else {
-			optionsMap[op.Name] = ""
+			opValue = *op.Value
 		}
+		optionsMap[op.Name] = opValue
 	}
 	// Reconvert DNS options into a string array.
 	options := []string{}
